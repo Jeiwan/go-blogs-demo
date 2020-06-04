@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12-alpine
+    environment: 
+      - POSTGRES_PASSWORD=dfgcvbdfg
+    expose:
+      - "5432"
+    volumes: 
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+  
+  app:
+    build: .
+    environment: 
+      - WEB_ADDRESS=0.0.0.0:3000
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=goblogs
+      - DB_USER=goblogs
+      - DB_PASSWORD=goblogs
+      - DEBUG=1
+    links:
+      - db
+    ports:
+      - "3000:3000"
